@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'payment_page.dart';
 
 class TopPage extends StatelessWidget {
   const TopPage({super.key});
@@ -15,7 +15,9 @@ class TopPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () => context.go('/payment'),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const PaymentPage()),
+              ),
               child: const Text('決済ページへ'),
             ),
           ],

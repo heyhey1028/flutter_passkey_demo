@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:slide_to_act/slide_to_act.dart';
+import 'completed_page.dart';
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({super.key});
@@ -36,7 +36,9 @@ class PaymentPage extends StatelessWidget {
                 onSubmit: () {
                   Future.delayed(
                     const Duration(milliseconds: 200),
-                    () => context.go('/completed'),
+                    () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const CompletedPage()),
+                    ),
                   );
                   return null;
                 },
