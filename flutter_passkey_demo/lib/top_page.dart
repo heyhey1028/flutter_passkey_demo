@@ -63,47 +63,47 @@ class TopPage extends StatelessWidget {
             children: [
               SizedBox(height: screenHeight * 0.25), // Position at 1/4 of screen height
               if (user != null)
-                FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    }
-                    print('Snapshot data: ${snapshot.data}');
-                    if (snapshot.hasData) {
-                      print('User data: ${snapshot.data?.data()}');
-                      final userData = snapshot.data!.data() as Map<String, dynamic>?;
-                      final name = userData?['name'] as String? ?? 'User';
-                      return Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Text(
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      FutureBuilder<DocumentSnapshot>(
+                        future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
+                        builder: (context, snapshot) {
+                          print('Snapshot data: ${snapshot.data}');
+                          if (snapshot.hasData) {
+                            print('User data: ${snapshot.data?.data()}');
+                            final userData = snapshot.data!.data() as Map<String, dynamic>?;
+                            final name = userData?['name'] as String? ?? 'User';
+                            return Text(
                               '👋 Welcome, $name!',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontSize: 24,
                               ),
+                            );
+                          }
+                          return const Text(
+                            '',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 24,
                             ),
-                            const SizedBox(height: 24), // Increased spacing here
-                            const Text(
-                              'This demo app showcases passkey authentication for secure and passwordless login.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 24), // Increased spacing here
+                      const Text(
+                        'This demo app showcases passkey authentication for secure and passwordless login.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
                         ),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
+                      ),
+                    ],
+                  ),
                 ),
               Expanded(
                 child: Center(
