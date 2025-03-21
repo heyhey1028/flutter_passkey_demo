@@ -7,7 +7,10 @@ service cloud.firestore {
       allow read: if request.auth != null;
       
       // ログインユーザーかつ、自分のドキュメントのみ書き込み可能
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+      
+      // ログインユーザーかつ、自分のドキュメントのみ削除可能
+      allow delete: if request.auth != null && request.auth.uid == userId;
     }
 
     // デフォルトですべてのアクセスを拒否
@@ -15,4 +18,4 @@ service cloud.firestore {
       allow read, write: if false;
     }
   }
-} 
+}
