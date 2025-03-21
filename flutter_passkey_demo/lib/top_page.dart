@@ -8,17 +8,25 @@ class TopPage extends StatelessWidget {
 
   Future<void> _handleLogout(BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signOut();
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // Delete user document from Firestore
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).delete();
+        // Delete user from Firebase Authentication
+        await user.delete();
+        // Sign out
+        await FirebaseAuth.instance.signOut();
+      }
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logged out successfully')),
+          const SnackBar(content: Text('Logged out and account deleted successfully')),
         );
-        // Add navigation to login screen here
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to logout: ${e.toString()}')),
+          SnackBar(content: Text('Failed to logout and delete account: ${e.toString()}')),
         );
       }
     }
@@ -34,7 +42,19 @@ class TopPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Passkey Demo'),
+        actions: [
+          TextButton(
+            onPressed: () => _handleLogout(context),
+            child: const Text(
+              'Logout',
+              style: TextStyle(
+                color: Colors.red,
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.red,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -60,12 +80,25 @@ class TopPage extends StatelessWidget {
                       return Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          '👋 Welcome, $name!',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 24,
-                          ),
+                        child: Column(
+                          children: [
+                            Text(
+                              '👋 Welcome, $name!',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 24,
+                              ),
+                            ),
+                            const SizedBox(height: 24), // Increased spacing here
+                            const Text(
+                              'This demo app showcases passkey authentication for secure and passwordless login.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     }
@@ -83,29 +116,18 @@ class TopPage extends StatelessWidget {
                         ),
                         child: const Text('Go to Payment'),
                       ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          // TODO: Implement passkey deletion
+                        },
+                        child: const Text('Delete Passkey'),
+                      ),
                     ],
                   ),
                 ),
               ),
             ],
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 32,
-            child: Center(
-              child: TextButton(
-                onPressed: () => _handleLogout(context),
-                child: const Text(
-                  'Logout',
-                  style: TextStyle(
-                    color: Colors.red,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.red,
-                  ),
-                ),
-              ),
-            ),
           ),
         ],
       ),
