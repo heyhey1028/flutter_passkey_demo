@@ -10,14 +10,14 @@ class TopPage extends StatelessWidget {
       await FirebaseAuth.instance.signOut();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('ログアウトしました')),
+          const SnackBar(content: Text('Logged out successfully')),
         );
-        // ログイン画面などに遷移する処理をここに追加
+        // Add navigation to login screen here
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('ログアウトに失敗しました: ${e.toString()}')),
+          SnackBar(content: Text('Failed to logout: ${e.toString()}')),
         );
       }
     }
@@ -43,7 +43,7 @@ class TopPage extends StatelessWidget {
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const PaymentPage()),
               ),
-              child: const Text('決済ページへ'),
+              child: const Text('Go to Payment'),
             ),
           ],
         ),

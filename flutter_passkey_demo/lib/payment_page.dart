@@ -9,20 +9,20 @@ class PaymentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('決済'),
+        title: const Text('Payment'),
       ),
       body: Column(
         children: [
           const Expanded(
             child: Center(
-              child: Text('スライドして決済を完了してください'),
+              child: Text('Slide to complete payment'),
             ),
           ),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: SlideAction(
-                text: 'スライドして決済を完了',
+                text: 'Slide to complete payment',
                 textStyle: const TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -33,6 +33,8 @@ class PaymentPage extends StatelessWidget {
                   Icons.arrow_forward,
                   color: Colors.white,
                 ),
+                sliderRotate: false,
+                animationDuration: const Duration(milliseconds: 500),
                 onSubmit: () {
                   Future.delayed(
                     const Duration(milliseconds: 200),

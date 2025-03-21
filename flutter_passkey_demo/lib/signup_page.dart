@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_passkey_demo/top_page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -17,7 +17,7 @@ class _SignupPageState extends State<SignupPage> {
   Future<void> _signup() async {
     if (_nameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('名前を入力してください')),
+        const SnackBar(content: Text('Please enter your name')),
       );
       return;
     }
@@ -27,26 +27,28 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     try {
-      // 匿名認証を実行
+      // Execute anonymous authentication
       final userCredential = await FirebaseAuth.instance.signInAnonymously();
       final user = userCredential.user;
 
       if (user != null) {
-        // Firestoreにユーザー情報を保存
+        // Save user information to Firestore
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'name': _nameController.text,
           'createdAt': FieldValue.serverTimestamp(),
         });
 
         if (mounted) {
-          // 登録成功時の処理（例：ホーム画面への遷移）
-          context.go('/');
+          // Handle successful registration (e.g., navigate to home screen)
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const TopPage()),
+          );
         }
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('登録に失敗しました')),
+          const SnackBar(content: Text('Registration failed')),
         );
       }
     } finally {
@@ -68,7 +70,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('新規登録'),
+        title: const Text('Sign Up'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -78,7 +80,7 @@ class _SignupPageState extends State<SignupPage> {
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
-                labelText: '名前',
+                labelText: 'Name',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -87,9 +89,7 @@ class _SignupPageState extends State<SignupPage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _signup,
-                child: _isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('登録'),
+                child: _isLoading ? const CircularProgressIndicator() : const Text('Register'),
               ),
             ),
           ],
@@ -97,4 +97,4 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
   }
-} 
+}
