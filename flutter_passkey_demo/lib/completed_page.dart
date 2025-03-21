@@ -12,27 +12,31 @@ class CompletedPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Payment Completed'),
           automaticallyImplyLeading: false,
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Payment Completed', style: TextStyle(fontSize: 20)),
-              const SizedBox(height: 24),
-              TextButton(
-                onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => const TopPage(),
-                    transitionDuration: Duration.zero,
+        body: Stack(
+          children: [
+            const Center(
+              child: Text('Payment Completed', style: TextStyle(fontSize: 20)),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 32,
+              child: Center(
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => const TopPage(),
+                      transitionDuration: Duration.zero,
+                    ),
+                    (route) => false,
                   ),
-                  (route) => false,
+                  child: const Text('Back to Top'),
                 ),
-                child: const Text('Back to Top'),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
