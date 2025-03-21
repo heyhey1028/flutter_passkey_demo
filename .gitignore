@@ -1,0 +1,42 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code related
+.vscode/
+
+# Flutter/Dart/Pub related
+flutter_passkey_demo/**/doc/api/
+flutter_passkey_demo/**/ios/Flutter/.last_build_id
+flutter_passkey_demo/.dart_tool/
+flutter_passkey_demo/.flutter-plugins
+flutter_passkey_demo/.flutter-plugins-dependencies
+flutter_passkey_demo/.pub-cache/
+flutter_passkey_demo/.pub/
+flutter_passkey_demo/build/
+
+# Firebase configuration files
+flutter_passkey_demo/ios/Runner/GoogleService-Info.plist
+flutter_passkey_demo/ios/firebase_app_id_file.json
+flutter_passkey_demo/android/app/google-services.json
+flutter_passkey_demo/lib/firebase_options.dart
+firebase.json
+.firebase/
+
+# Firebase Functions
+functions/node_modules/
+functions/lib/
