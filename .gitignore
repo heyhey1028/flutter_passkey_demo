@@ -40,3 +40,8 @@ firebase.json
 # Firebase Functions
 functions/node_modules/
 functions/lib/
+
+# Explicitly include .well-known directory in public
+!public/
+!public/.well-known/
+!public/.well-known/*
