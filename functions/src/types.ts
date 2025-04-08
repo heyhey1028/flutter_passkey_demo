@@ -1,8 +1,8 @@
 import {
   RegistrationResponseJSON,
   AuthenticationResponseJSON,
-  generateRegistrationOptions,
-  generateAuthenticationOptions,
+  PublicKeyCredentialCreationOptionsJSON,
+  PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/server';
 
 export interface BeginPasskeyRegistrationRequest {
@@ -11,7 +11,7 @@ export interface BeginPasskeyRegistrationRequest {
   displayName: string;
 }
 
-export type BeginPasskeyRegistrationResponse = Awaited<ReturnType<typeof generateRegistrationOptions>>;
+export type BeginPasskeyRegistrationResponse = PublicKeyCredentialCreationOptionsJSON;
 
 export interface FinishPasskeyRegistrationRequest {
   userId: string;
@@ -27,7 +27,7 @@ export interface BeginPasskeyAuthenticationRequest {
   userId: string;
 }
 
-export type BeginPasskeyAuthenticationResponse = Awaited<ReturnType<typeof generateAuthenticationOptions>>;
+export type BeginPasskeyAuthenticationResponse = PublicKeyCredentialRequestOptionsJSON;
 
 export interface FinishPasskeyAuthenticationRequest {
   userId: string;

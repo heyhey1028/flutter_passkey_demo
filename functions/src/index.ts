@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 import {
   generateRegistrationOptions,
@@ -22,9 +22,9 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
-export const beginPasskeyRegistration = functions.https.onCall(
-  async (request: functions.https.CallableRequest<BeginPasskeyRegistrationRequest>): Promise<BeginPasskeyRegistrationResponse> => {
-    const { userId, username, displayName } = request.data;
+export const beginPasskeyRegistration = onCall(
+  async (request) => {
+    const { userId, username, displayName } = request.data as BeginPasskeyRegistrationRequest;
 
     const options = await generateRegistrationOptions({
       rpName: 'Passkey Demo',
@@ -46,18 +46,18 @@ export const beginPasskeyRegistration = functions.https.onCall(
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    return options;
+    return options as BeginPasskeyRegistrationResponse;
   }
 );
 
-export const finishPasskeyRegistration = functions.https.onCall(
-  async (request: functions.https.CallableRequest<FinishPasskeyRegistrationRequest>): Promise<FinishPasskeyRegistrationResponse> => {
-    const { userId, attestationResponse } = request.data;
+export const finishPasskeyRegistration = onCall(
+  async (request) => {
+    const { userId, attestationResponse } = request.data as FinishPasskeyRegistrationRequest;
 
     // チャレンジを取得
     const challengeDoc = await db.collection('challenges').doc(userId).get();
     if (!challengeDoc.exists) {
-      throw new functions.https.HttpsError('failed-precondition', 'Challenge not found');
+      throw new HttpsError('failed-precondition', 'Challenge not found');
     }
 
     const expectedChallenge = challengeDoc.data()?.challenge;
@@ -83,27 +83,28 @@ export const finishPasskeyRegistration = functions.https.onCall(
         // チャレンジを削除
         await db.collection('challenges').doc(userId).delete();
 
-        return {
+        const response: FinishPasskeyRegistrationResponse = {
           status: 'success',
           message: 'パスキーの登録が完了しました。',
         };
+        return response;
       }
     } catch (error) {
       console.error('Verification failed:', error);
     }
 
-    throw new functions.https.HttpsError('internal', 'Registration verification failed');
+    throw new HttpsError('internal', 'Registration verification failed');
   }
 );
 
-export const beginPasskeyAuthentication = functions.https.onCall(
-  async (request: functions.https.CallableRequest<BeginPasskeyAuthenticationRequest>): Promise<BeginPasskeyAuthenticationResponse> => {
-    const { userId } = request.data;
+export const beginPasskeyAuthentication = onCall(
+  async (request) => {
+    const { userId } = request.data as BeginPasskeyAuthenticationRequest;
 
     // クレデンシャルを取得
     const credentialDoc = await db.collection('credentials').doc(userId).get();
     if (!credentialDoc.exists) {
-      throw new functions.https.HttpsError('failed-precondition', 'Credential not found');
+      throw new HttpsError('failed-precondition', 'Credential not found');
     }
 
     const credential = credentialDoc.data() as StoredCredential;
@@ -125,18 +126,18 @@ export const beginPasskeyAuthentication = functions.https.onCall(
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    return options;
+    return options as BeginPasskeyAuthenticationResponse;
   }
 );
 
-export const finishPasskeyAuthentication = functions.https.onCall(
-  async (request: functions.https.CallableRequest<FinishPasskeyAuthenticationRequest>): Promise<FinishPasskeyAuthenticationResponse> => {
-    const { userId, attestationResponse } = request.data;
+export const finishPasskeyAuthentication = onCall(
+  async (request) => {
+    const { userId, attestationResponse } = request.data as FinishPasskeyAuthenticationRequest;
 
     // チャレンジを取得
     const challengeDoc = await db.collection('challenges').doc(userId).get();
     if (!challengeDoc.exists) {
-      throw new functions.https.HttpsError('failed-precondition', 'Challenge not found');
+      throw new HttpsError('failed-precondition', 'Challenge not found');
     }
 
     const expectedChallenge = challengeDoc.data()?.challenge;
@@ -144,7 +145,7 @@ export const finishPasskeyAuthentication = functions.https.onCall(
     // クレデンシャルを取得
     const credentialDoc = await db.collection('credentials').doc(userId).get();
     if (!credentialDoc.exists) {
-      throw new functions.https.HttpsError('failed-precondition', 'Credential not found');
+      throw new HttpsError('failed-precondition', 'Credential not found');
     }
 
     const credential = credentialDoc.data() as StoredCredential;
@@ -172,19 +173,20 @@ export const finishPasskeyAuthentication = functions.https.onCall(
         // チャレンジを削除
         await db.collection('challenges').doc(userId).delete();
 
-        // Firebaseカスタムトークンを生成
+        // Firebaseカスタムトークンの生成
         const customToken = await admin.auth().createCustomToken(userId);
 
-        return {
+        const response: FinishPasskeyAuthenticationResponse = {
           status: 'success',
           message: '認証成功',
           firebaseToken: customToken,
         };
+        return response;
       }
     } catch (error) {
       console.error('Verification failed:', error);
     }
 
-    throw new functions.https.HttpsError('internal', 'Authentication verification failed');
+    throw new HttpsError('internal', 'Authentication verification failed');
   }
 );
