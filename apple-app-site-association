@@ -1,0 +1,21 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "YOUR_TEAM_ID.com.example.flutterPasskeyDemo",
+        "components": [
+          {
+            "/": "/*",
+            "comment": "Matches all URLs"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "YOUR_TEAM_ID.com.example.flutterPasskeyDemo"
+    ]
+  }
+} 
