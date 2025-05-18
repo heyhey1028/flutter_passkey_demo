@@ -9,6 +9,7 @@ class FinishAuthenticationRequest with _$FinishAuthenticationRequest {
   const factory FinishAuthenticationRequest({
     required String userId,
     required AttestationResponse attestationResponse,
+    required String platform,
   }) = _FinishAuthenticationRequest;
 
   factory FinishAuthenticationRequest.fromJson(Map<String, dynamic> json) => _$FinishAuthenticationRequestFromJson(json);

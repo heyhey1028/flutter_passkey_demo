@@ -24,6 +24,7 @@ mixin _$FinishRegistrationRequest {
   String get userId => throw _privateConstructorUsedError;
   AttestationResponse get attestationResponse =>
       throw _privateConstructorUsedError;
+  String get platform => throw _privateConstructorUsedError;
 
   /// Serializes this FinishRegistrationRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +42,10 @@ abstract class $FinishRegistrationRequestCopyWith<$Res> {
           $Res Function(FinishRegistrationRequest) then) =
       _$FinishRegistrationRequestCopyWithImpl<$Res, FinishRegistrationRequest>;
   @useResult
-  $Res call({String userId, AttestationResponse attestationResponse});
+  $Res call(
+      {String userId,
+      AttestationResponse attestationResponse,
+      String platform});
 
   $AttestationResponseCopyWith<$Res> get attestationResponse;
 }
@@ -64,6 +68,7 @@ class _$FinishRegistrationRequestCopyWithImpl<$Res,
   $Res call({
     Object? userId = null,
     Object? attestationResponse = null,
+    Object? platform = null,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
@@ -74,6 +79,10 @@ class _$FinishRegistrationRequestCopyWithImpl<$Res,
           ? _value.attestationResponse
           : attestationResponse // ignore: cast_nullable_to_non_nullable
               as AttestationResponse,
+      platform: null == platform
+          ? _value.platform
+          : platform // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -98,7 +107,10 @@ abstract class _$$FinishRegistrationRequestImplCopyWith<$Res>
       __$$FinishRegistrationRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String userId, AttestationResponse attestationResponse});
+  $Res call(
+      {String userId,
+      AttestationResponse attestationResponse,
+      String platform});
 
   @override
   $AttestationResponseCopyWith<$Res> get attestationResponse;
@@ -121,6 +133,7 @@ class __$$FinishRegistrationRequestImplCopyWithImpl<$Res>
   $Res call({
     Object? userId = null,
     Object? attestationResponse = null,
+    Object? platform = null,
   }) {
     return _then(_$FinishRegistrationRequestImpl(
       userId: null == userId
@@ -131,6 +144,10 @@ class __$$FinishRegistrationRequestImplCopyWithImpl<$Res>
           ? _value.attestationResponse
           : attestationResponse // ignore: cast_nullable_to_non_nullable
               as AttestationResponse,
+      platform: null == platform
+          ? _value.platform
+          : platform // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -139,7 +156,9 @@ class __$$FinishRegistrationRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FinishRegistrationRequestImpl implements _FinishRegistrationRequest {
   const _$FinishRegistrationRequestImpl(
-      {required this.userId, required this.attestationResponse});
+      {required this.userId,
+      required this.attestationResponse,
+      required this.platform});
 
   factory _$FinishRegistrationRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$FinishRegistrationRequestImplFromJson(json);
@@ -148,10 +167,12 @@ class _$FinishRegistrationRequestImpl implements _FinishRegistrationRequest {
   final String userId;
   @override
   final AttestationResponse attestationResponse;
+  @override
+  final String platform;
 
   @override
   String toString() {
-    return 'FinishRegistrationRequest(userId: $userId, attestationResponse: $attestationResponse)';
+    return 'FinishRegistrationRequest(userId: $userId, attestationResponse: $attestationResponse, platform: $platform)';
   }
 
   @override
@@ -161,12 +182,15 @@ class _$FinishRegistrationRequestImpl implements _FinishRegistrationRequest {
             other is _$FinishRegistrationRequestImpl &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.attestationResponse, attestationResponse) ||
-                other.attestationResponse == attestationResponse));
+                other.attestationResponse == attestationResponse) &&
+            (identical(other.platform, platform) ||
+                other.platform == platform));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, userId, attestationResponse);
+  int get hashCode =>
+      Object.hash(runtimeType, userId, attestationResponse, platform);
 
   /// Create a copy of FinishRegistrationRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -187,9 +211,9 @@ class _$FinishRegistrationRequestImpl implements _FinishRegistrationRequest {
 
 abstract class _FinishRegistrationRequest implements FinishRegistrationRequest {
   const factory _FinishRegistrationRequest(
-          {required final String userId,
-          required final AttestationResponse attestationResponse}) =
-      _$FinishRegistrationRequestImpl;
+      {required final String userId,
+      required final AttestationResponse attestationResponse,
+      required final String platform}) = _$FinishRegistrationRequestImpl;
 
   factory _FinishRegistrationRequest.fromJson(Map<String, dynamic> json) =
       _$FinishRegistrationRequestImpl.fromJson;
@@ -198,6 +222,8 @@ abstract class _FinishRegistrationRequest implements FinishRegistrationRequest {
   String get userId;
   @override
   AttestationResponse get attestationResponse;
+  @override
+  String get platform;
 
   /// Create a copy of FinishRegistrationRequest
   /// with the given fields replaced by the non-null parameter values.

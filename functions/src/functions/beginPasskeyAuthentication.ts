@@ -1,6 +1,7 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 import { generateAuthenticationOptions } from '@simplewebauthn/server';
+import * as functions from 'firebase-functions';
 import {
   BeginPasskeyAuthenticationRequest,
   BeginPasskeyAuthenticationResponse,
@@ -8,6 +9,7 @@ import {
 } from '../types';
 
 const db = admin.firestore();
+const RP_ID = functions.config().rp_id;
 
 export const beginPasskeyAuthentication = onCall({
   region: 'asia-northeast2',
@@ -23,7 +25,7 @@ export const beginPasskeyAuthentication = onCall({
   const credential = credentialDoc.data() as StoredCredential;
 
   const options = await generateAuthenticationOptions({
-    rpID: 'localhost',
+    rpID: RP_ID,
     allowCredentials: [
       {
         id: Buffer.from(credential.credentialID, 'base64url').toString('base64url'),

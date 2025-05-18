@@ -1,6 +1,7 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 import { verifyRegistrationResponse } from '@simplewebauthn/server';
+import * as functions from 'firebase-functions';
 import {
   FinishPasskeyRegistrationRequest,
   FinishPasskeyRegistrationResponse,
@@ -8,11 +9,15 @@ import {
 } from '../types';
 
 const db = admin.firestore();
+const RP_ID = functions.config().rp_id;
+const ORIGIN_IOS = functions.config().origin_ios;
+const ORIGIN_ANDROID = functions.config().origin_android;
+const ORIGIN_WEB = functions.config().origin_web;
 
 export const finishPasskeyRegistration = onCall({
   region: 'asia-northeast2',
 }, async (request) => {
-  const { userId, attestationResponse } = request.data as FinishPasskeyRegistrationRequest;
+  const { userId, attestationResponse, platform } = request.data as FinishPasskeyRegistrationRequest;
 
   // チャレンジを取得
   const challengeDoc = await db.collection('challenges').doc(userId).get();
@@ -23,11 +28,19 @@ export const finishPasskeyRegistration = onCall({
   const expectedChallenge = challengeDoc.data()?.challenge;
 
   try {
+    // プラットフォームに応じたOriginを選択
+    let expectedOrigin = ORIGIN_WEB;
+    if (platform === 'ios') {
+      expectedOrigin = ORIGIN_IOS;
+    } else if (platform === 'android') {
+      expectedOrigin = ORIGIN_ANDROID;
+    }
+
     const verification = await verifyRegistrationResponse({
       response: attestationResponse,
       expectedChallenge,
-      expectedOrigin: 'http://localhost:3000',
-      expectedRPID: 'localhost',
+      expectedOrigin,
+      expectedRPID: RP_ID,
     });
 
     if (verification.verified && verification.registrationInfo) {
@@ -45,7 +58,7 @@ export const finishPasskeyRegistration = onCall({
 
       const response: FinishPasskeyRegistrationResponse = {
         status: 'success',
-        message: 'パスキーの登録が完了しました。',
+        message: 'Passkey registration completed.',
       };
       return response;
     }

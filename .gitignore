@@ -40,8 +40,17 @@ firebase.json
 # Firebase Functions
 functions/node_modules/
 functions/lib/
+functions/.runtimeconfig.json
 
 # Explicitly include .well-known directory in public
 !public/
 !public/.well-known/
 !public/.well-known/*
+
+# SpecStory explanation file
+.specstory/*
+
+# Environment variables
+.env
+# SpecStory explanation file
+.specstory/.what-is-this.md

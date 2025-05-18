@@ -24,6 +24,7 @@ mixin _$FinishAuthenticationRequest {
   String get userId => throw _privateConstructorUsedError;
   AttestationResponse get attestationResponse =>
       throw _privateConstructorUsedError;
+  String get platform => throw _privateConstructorUsedError;
 
   /// Serializes this FinishAuthenticationRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,7 +44,10 @@ abstract class $FinishAuthenticationRequestCopyWith<$Res> {
       _$FinishAuthenticationRequestCopyWithImpl<$Res,
           FinishAuthenticationRequest>;
   @useResult
-  $Res call({String userId, AttestationResponse attestationResponse});
+  $Res call(
+      {String userId,
+      AttestationResponse attestationResponse,
+      String platform});
 
   $AttestationResponseCopyWith<$Res> get attestationResponse;
 }
@@ -66,6 +70,7 @@ class _$FinishAuthenticationRequestCopyWithImpl<$Res,
   $Res call({
     Object? userId = null,
     Object? attestationResponse = null,
+    Object? platform = null,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
@@ -76,6 +81,10 @@ class _$FinishAuthenticationRequestCopyWithImpl<$Res,
           ? _value.attestationResponse
           : attestationResponse // ignore: cast_nullable_to_non_nullable
               as AttestationResponse,
+      platform: null == platform
+          ? _value.platform
+          : platform // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -100,7 +109,10 @@ abstract class _$$FinishAuthenticationRequestImplCopyWith<$Res>
       __$$FinishAuthenticationRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String userId, AttestationResponse attestationResponse});
+  $Res call(
+      {String userId,
+      AttestationResponse attestationResponse,
+      String platform});
 
   @override
   $AttestationResponseCopyWith<$Res> get attestationResponse;
@@ -123,6 +135,7 @@ class __$$FinishAuthenticationRequestImplCopyWithImpl<$Res>
   $Res call({
     Object? userId = null,
     Object? attestationResponse = null,
+    Object? platform = null,
   }) {
     return _then(_$FinishAuthenticationRequestImpl(
       userId: null == userId
@@ -133,6 +146,10 @@ class __$$FinishAuthenticationRequestImplCopyWithImpl<$Res>
           ? _value.attestationResponse
           : attestationResponse // ignore: cast_nullable_to_non_nullable
               as AttestationResponse,
+      platform: null == platform
+          ? _value.platform
+          : platform // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -142,7 +159,9 @@ class __$$FinishAuthenticationRequestImplCopyWithImpl<$Res>
 class _$FinishAuthenticationRequestImpl
     implements _FinishAuthenticationRequest {
   const _$FinishAuthenticationRequestImpl(
-      {required this.userId, required this.attestationResponse});
+      {required this.userId,
+      required this.attestationResponse,
+      required this.platform});
 
   factory _$FinishAuthenticationRequestImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -152,10 +171,12 @@ class _$FinishAuthenticationRequestImpl
   final String userId;
   @override
   final AttestationResponse attestationResponse;
+  @override
+  final String platform;
 
   @override
   String toString() {
-    return 'FinishAuthenticationRequest(userId: $userId, attestationResponse: $attestationResponse)';
+    return 'FinishAuthenticationRequest(userId: $userId, attestationResponse: $attestationResponse, platform: $platform)';
   }
 
   @override
@@ -165,12 +186,15 @@ class _$FinishAuthenticationRequestImpl
             other is _$FinishAuthenticationRequestImpl &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.attestationResponse, attestationResponse) ||
-                other.attestationResponse == attestationResponse));
+                other.attestationResponse == attestationResponse) &&
+            (identical(other.platform, platform) ||
+                other.platform == platform));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, userId, attestationResponse);
+  int get hashCode =>
+      Object.hash(runtimeType, userId, attestationResponse, platform);
 
   /// Create a copy of FinishAuthenticationRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -192,9 +216,9 @@ class _$FinishAuthenticationRequestImpl
 abstract class _FinishAuthenticationRequest
     implements FinishAuthenticationRequest {
   const factory _FinishAuthenticationRequest(
-          {required final String userId,
-          required final AttestationResponse attestationResponse}) =
-      _$FinishAuthenticationRequestImpl;
+      {required final String userId,
+      required final AttestationResponse attestationResponse,
+      required final String platform}) = _$FinishAuthenticationRequestImpl;
 
   factory _FinishAuthenticationRequest.fromJson(Map<String, dynamic> json) =
       _$FinishAuthenticationRequestImpl.fromJson;
@@ -203,6 +227,8 @@ abstract class _FinishAuthenticationRequest
   String get userId;
   @override
   AttestationResponse get attestationResponse;
+  @override
+  String get platform;
 
   /// Create a copy of FinishAuthenticationRequest
   /// with the given fields replaced by the non-null parameter values.

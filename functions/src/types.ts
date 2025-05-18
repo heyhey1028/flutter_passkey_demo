@@ -16,6 +16,7 @@ export type BeginPasskeyRegistrationResponse = PublicKeyCredentialCreationOption
 export interface FinishPasskeyRegistrationRequest {
   userId: string;
   attestationResponse: RegistrationResponseJSON;
+  platform: 'ios' | 'android' | 'web';
 }
 
 export interface FinishPasskeyRegistrationResponse {
@@ -32,6 +33,7 @@ export type BeginPasskeyAuthenticationResponse = PublicKeyCredentialRequestOptio
 export interface FinishPasskeyAuthenticationRequest {
   userId: string;
   attestationResponse: AuthenticationResponseJSON;
+  platform: 'ios' | 'android' | 'web';
 }
 
 export interface FinishPasskeyAuthenticationResponse {

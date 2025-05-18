@@ -1,6 +1,7 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 import { verifyAuthenticationResponse } from '@simplewebauthn/server';
+import * as functions from 'firebase-functions';
 import {
   FinishPasskeyAuthenticationRequest,
   FinishPasskeyAuthenticationResponse,
@@ -8,11 +9,15 @@ import {
 } from '../types';
 
 const db = admin.firestore();
+const RP_ID = functions.config().rp_id;
+const ORIGIN_IOS = functions.config().origin_ios;
+const ORIGIN_ANDROID = functions.config().origin_android;
+const ORIGIN_WEB = functions.config().origin_web;
 
 export const finishPasskeyAuthentication = onCall({
   region: 'asia-northeast2',
 }, async (request) => {
-  const { userId, attestationResponse } = request.data as FinishPasskeyAuthenticationRequest;
+  const { userId, attestationResponse, platform } = request.data as FinishPasskeyAuthenticationRequest;
 
   // チャレンジを取得
   const challengeDoc = await db.collection('challenges').doc(userId).get();
@@ -31,12 +36,19 @@ export const finishPasskeyAuthentication = onCall({
   const credential = credentialDoc.data() as StoredCredential;
 
   try {
-    // 認証レスポンスをverifyAuthenticationResponseで検証
+    // プラットフォームに応じたOriginを選択
+    let expectedOrigin = ORIGIN_WEB;
+    if (platform === 'ios') {
+      expectedOrigin = ORIGIN_IOS;
+    } else if (platform === 'android') {
+      expectedOrigin = ORIGIN_ANDROID;
+    }
+
     const verification = await verifyAuthenticationResponse({
       response: attestationResponse,
       expectedChallenge,
-      expectedOrigin: 'http://localhost:3000',
-      expectedRPID: 'localhost',
+      expectedOrigin,
+      expectedRPID: RP_ID,
       credential: {
         id: new Uint8Array(Buffer.from(credential.credentialID, 'base64url')),
         publicKey: new Uint8Array(Buffer.from(credential.credentialPublicKey, 'base64url')),
@@ -58,7 +70,7 @@ export const finishPasskeyAuthentication = onCall({
 
       const response: FinishPasskeyAuthenticationResponse = {
         status: 'success',
-        message: '認証成功',
+        message: 'Passkey Authentication completed.',
         firebaseToken: customToken,
       };
       return response;

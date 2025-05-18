@@ -1,12 +1,15 @@
 import { onCall } from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 import { generateRegistrationOptions } from '@simplewebauthn/server';
+import * as functions from 'firebase-functions';
 import {
   BeginPasskeyRegistrationRequest,
   BeginPasskeyRegistrationResponse,
 } from '../types';
 
 const db = admin.firestore();
+const RP_ID = functions.config().rp_id;
+const RP_NAME = 'Passkey Demo';
 
 export const beginPasskeyRegistration = onCall({
   region: 'asia-northeast2',
@@ -14,8 +17,8 @@ export const beginPasskeyRegistration = onCall({
   const { userId, username, displayName } = request.data as BeginPasskeyRegistrationRequest;
 
   const options = await generateRegistrationOptions({
-    rpName: 'Passkey Demo',
-    rpID: 'localhost',
+    rpName: RP_NAME,
+    rpID: RP_ID,
     userID: new TextEncoder().encode(userId),
     userName: username,
     userDisplayName: displayName,

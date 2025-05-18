@@ -12,6 +12,7 @@ _$FinishRegistrationRequestImpl _$$FinishRegistrationRequestImplFromJson(
       userId: json['userId'] as String,
       attestationResponse: AttestationResponse.fromJson(
           json['attestationResponse'] as Map<String, dynamic>),
+      platform: json['platform'] as String,
     );
 
 Map<String, dynamic> _$$FinishRegistrationRequestImplToJson(
@@ -19,4 +20,5 @@ Map<String, dynamic> _$$FinishRegistrationRequestImplToJson(
     <String, dynamic>{
       'userId': instance.userId,
       'attestationResponse': instance.attestationResponse,
+      'platform': instance.platform,
     };
