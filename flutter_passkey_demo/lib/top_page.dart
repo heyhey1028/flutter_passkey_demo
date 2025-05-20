@@ -66,17 +66,6 @@ class TopPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: const Text('ホーム'),
-            actions: [
-              TextButton(
-                onPressed: () => _handleLogout(context),
-                child: const Text(
-                  'ログアウト',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-            ],
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -133,6 +122,16 @@ class TopPage extends StatelessWidget {
                           // TODO: パスキーの削除を実装
                         },
                         child: const Text('パスキーを削除'),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () => _handleLogout(context),
+                      child: const Text(
+                        'ログアウト',
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
                       ),
                     ),
                   ],
