@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'payment_page.dart';
 
 class TopPage extends StatelessWidget {
@@ -8,25 +9,14 @@ class TopPage extends StatelessWidget {
 
   Future<void> _handleLogout(BuildContext context) async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        // Delete user document from Firestore
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).delete();
-        // Delete user from Firebase Authentication
-        await user.delete();
-        // Sign out
-        await FirebaseAuth.instance.signOut();
-      }
-
+      await FirebaseAuth.instance.signOut();
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logged out and account deleted successfully')),
-        );
+        context.go('/login');
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to logout and delete account: ${e.toString()}')),
+          SnackBar(content: Text('ログアウトに失敗しました: ${e.toString()}')),
         );
       }
     }
@@ -34,103 +24,136 @@ class TopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    final screenHeight = MediaQuery.of(context).size.height;
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
 
-    // Print user ID when screen is built
-    print('Current user ID: ${user?.uid}');
-
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          TextButton(
-            onPressed: () => _handleLogout(context),
-            child: const Text(
-              'Logout',
-              style: TextStyle(
-                color: Colors.red,
-                decoration: TextDecoration.underline,
-                decorationColor: Colors.red,
+        final user = snapshot.data;
+        if (user == null) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('ようこそ'),
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'ログインまたは新規登録してください',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () => context.go('/login'),
+                    child: const Text('ログイン'),
+                  ),
+                  TextButton(
+                    onPressed: () => context.go('/signup'),
+                    child: const Text('新規登録'),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: screenHeight * 0.25), // Position at 1/4 of screen height
-              if (user != null)
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      FutureBuilder<DocumentSnapshot>(
-                        future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
-                        builder: (context, snapshot) {
-                          print('Snapshot data: ${snapshot.data}');
-                          if (snapshot.hasData) {
-                            print('User data: ${snapshot.data?.data()}');
-                            final userData = snapshot.data!.data() as Map<String, dynamic>?;
-                            final name = userData?['name'] as String? ?? 'User';
-                            return Text(
-                              '👋 Welcome, $name!',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 24,
-                              ),
-                            );
-                          }
-                          return const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 24,
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 24), // Increased spacing here
-                      const Text(
-                        'This demo app showcases passkey authentication for secure and passwordless login.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => const PaymentPage()),
-                        ),
-                        child: const Text('Go to Payment'),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          // TODO: Implement passkey deletion
-                        },
-                        child: const Text('Delete Passkey'),
-                      ),
-                    ],
+          );
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('ホーム'),
+            actions: [
+              TextButton(
+                onPressed: () => _handleLogout(context),
+                child: const Text(
+                  'ログアウト',
+                  style: TextStyle(
+                    color: Colors.red,
                   ),
                 ),
               ),
             ],
           ),
-        ],
-      ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 32),
+              FutureBuilder<DocumentSnapshot>(
+                future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
+                builder: (context, snapshot) {
+                  final userData = snapshot.data?.data() as Map<String, dynamic>?;
+                  final name = userData?['name'] as String? ?? user.displayName ?? 'ユーザー';
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          '👋 ようこそ、$nameさん！',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 24,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          user.email ?? '',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'このデモアプリでは、パスキー認証を使用した安全なパスワードレス認証を体験できます。',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => const PaymentPage()),
+                        ),
+                        child: const Text('決済ページへ'),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          // TODO: パスキーの削除を実装
+                        },
+                        child: const Text('パスキーを削除'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
+            ],
+          ),
+        );
+      },
     );
   }
 }
