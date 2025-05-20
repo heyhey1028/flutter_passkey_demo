@@ -23,11 +23,15 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/login',
-      builder: (context, state) => const LoginPage(),
+      pageBuilder: (context, state) => const NoTransitionPage<void>(
+        child: LoginPage(),
+      ),
     ),
     GoRoute(
       path: '/signup',
-      builder: (context, state) => const SignupPage(),
+      pageBuilder: (context, state) => const NoTransitionPage<void>(
+        child: SignupPage(),
+      ),
     ),
   ],
 );
