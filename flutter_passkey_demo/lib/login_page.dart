@@ -87,9 +87,27 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
               const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _login,
-                child: const Text('ログイン'),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: _login,
+                  child: const Text('パスワードでログイン'),
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    // TODO: パスキーログインの実装
+                  },
+                  icon: const Icon(Icons.fingerprint),
+                  label: const Text('パスキーでログイン'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
               ),
               TextButton(
                 onPressed: () => context.go('/signup'),
