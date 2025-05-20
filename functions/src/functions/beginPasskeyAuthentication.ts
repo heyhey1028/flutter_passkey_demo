@@ -1,9 +1,8 @@
-import { onCall, HttpsError } from 'firebase-functions/v2/https';
+import { onCall } from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 import { generateAuthenticationOptions } from '@simplewebauthn/server';
 import * as functions from 'firebase-functions';
 import {
-  BeginPasskeyAuthenticationRequest,
   BeginPasskeyAuthenticationResponse,
 } from '../types';
 
