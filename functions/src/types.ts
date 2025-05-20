@@ -5,6 +5,19 @@ import {
   PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/server';
 
+declare global {
+  namespace FirebaseFunctions {
+    interface Config {
+      auth: {
+        rp_id: string;
+        origin_ios: string;
+        origin_android: string;
+        origin_web: string;
+      }
+    }
+  }
+}
+
 export interface BeginPasskeyRegistrationRequest {
   userId: string;
   username: string;

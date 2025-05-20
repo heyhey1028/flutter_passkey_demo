@@ -1,13 +1,11 @@
 import { onCall } from 'firebase-functions/v2/https';
-import * as admin from 'firebase-admin';
 import { generateAuthenticationOptions } from '@simplewebauthn/server';
-import * as functions from 'firebase-functions';
+import { db, admin } from '../firebase-admin';
 import {
   BeginPasskeyAuthenticationResponse,
 } from '../types';
 
-const db = admin.firestore();
-const RP_ID = functions.config().rp_id;
+const RP_ID = process.env.RP_ID|| 'example.com';
 
 export const beginPasskeyAuthentication = onCall({
   region: 'asia-northeast2',

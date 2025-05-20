@@ -1,18 +1,16 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
-import * as admin from 'firebase-admin';
 import { verifyAuthenticationResponse } from '@simplewebauthn/server';
-import * as functions from 'firebase-functions';
+import { db, admin } from '../firebase-admin';
 import {
   FinishPasskeyAuthenticationRequest,
   FinishPasskeyAuthenticationResponse,
   StoredCredential,
 } from '../types';
 
-const db = admin.firestore();
-const RP_ID = functions.config().rp_id;
-const ORIGIN_IOS = functions.config().origin_ios;
-const ORIGIN_ANDROID = functions.config().origin_android;
-const ORIGIN_WEB = functions.config().origin_web;
+const RP_ID = process.env.RP_ID || 'example.com';
+const ORIGIN_IOS = process.env.ORIGIN_IOS || 'ios:com.example.app';
+const ORIGIN_ANDROID = process.env.ORIGIN_ANDROID || 'android:SHA256:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF';
+const ORIGIN_WEB = process.env.ORIGIN_WEB || 'https://example.com';
 
 export const finishPasskeyAuthentication = onCall({
   region: 'asia-northeast2',
