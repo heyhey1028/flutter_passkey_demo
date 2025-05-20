@@ -115,16 +115,6 @@ class TopPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          // TODO: パスキーの削除を実装
-                        },
-                        child: const Text('Delete Passkey'),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
                     TextButton(
                       onPressed: () => _handleLogout(context),
                       child: const Text(
