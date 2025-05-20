@@ -28,10 +28,10 @@ class _LoginPageState extends State<LoginPage> {
       } on FirebaseAuthException catch (e) {
         setState(() {
           _errorMessage = switch (e.code) {
-            'user-not-found' => 'ユーザーが見つかりません',
-            'wrong-password' => 'パスワードが間違っています',
-            'invalid-email' => 'メールアドレスの形式が正しくありません',
-            _ => '認証エラーが発生しました',
+            'user-not-found' => 'User not found',
+            'wrong-password' => 'Incorrect password',
+            'invalid-email' => 'Invalid email format',
+            _ => 'Authentication error occurred',
           };
         });
       }
@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ログイン'),
+        title: const Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -54,12 +54,12 @@ class _LoginPageState extends State<LoginPage> {
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
-                  labelText: 'メールアドレス',
+                  labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'メールアドレスを入力してください';
+                    return 'Please enter your email';
                   }
                   return null;
                 },
@@ -68,13 +68,13 @@ class _LoginPageState extends State<LoginPage> {
               TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  labelText: 'パスワード',
+                  labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'パスワードを入力してください';
+                    return 'Please enter your password';
                   }
                   return null;
                 },
@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 child: OutlinedButton(
                   onPressed: _login,
-                  child: const Text('パスワードでログイン'),
+                  child: const Text('Sign in with Password'),
                 ),
               ),
               const SizedBox(height: 16),
@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                     // TODO: パスキーログインの実装
                   },
                   icon: const Icon(Icons.fingerprint),
-                  label: const Text('パスキーでログイン'),
+                  label: const Text('Sign in with Passkey'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextButton(
                 onPressed: () => context.go('/signup'),
-                child: const Text('アカウントをお持ちでない方はこちら'),
+                child: const Text('Don\'t have an account? Sign up'),
               ),
             ],
           ),

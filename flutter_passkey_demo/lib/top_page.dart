@@ -15,7 +15,7 @@ class TopPage extends StatelessWidget {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('ログアウトに失敗しました: ${e.toString()}')),
+          SnackBar(content: Text('Failed to logout: ${e.toString()}')),
         );
       }
     }
@@ -38,24 +38,24 @@ class TopPage extends StatelessWidget {
         if (user == null) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('ようこそ'),
+              title: const Text('Welcome'),
             ),
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'ログインまたは新規登録してください',
+                    'Please login or sign up',
                     style: TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () => context.go('/login'),
-                    child: const Text('ログイン'),
+                    child: const Text('Login'),
                   ),
                   TextButton(
                     onPressed: () => context.go('/signup'),
-                    child: const Text('新規登録'),
+                    child: const Text('Sign up'),
                   ),
                 ],
               ),
@@ -65,7 +65,7 @@ class TopPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('ホーム'),
+            title: const Text('Home'),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,13 +75,13 @@ class TopPage extends StatelessWidget {
                 future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
                 builder: (context, snapshot) {
                   final userData = snapshot.data?.data() as Map<String, dynamic>?;
-                  final name = userData?['name'] as String? ?? user.displayName ?? 'ユーザー';
+                  final name = userData?['name'] as String? ?? user.displayName ?? 'User';
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
                         Text(
-                          '👋 ようこそ、$nameさん！',
+                          '👋 Welcome, $name!',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 24,
@@ -102,7 +102,7 @@ class TopPage extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  'このデモアプリでは、パスキー認証を使用した安全なパスワードレス認証を体験できます。',
+                  'In this demo app, you can experience secure passwordless authentication using passkeys.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -121,14 +121,14 @@ class TopPage extends StatelessWidget {
                         onPressed: () {
                           // TODO: パスキーの削除を実装
                         },
-                        child: const Text('パスキーを削除'),
+                        child: const Text('Delete Passkey'),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () => _handleLogout(context),
                       child: const Text(
-                        'ログアウト',
+                        'Logout',
                         style: TextStyle(
                           color: Colors.red,
                         ),

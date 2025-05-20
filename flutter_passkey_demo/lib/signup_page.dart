@@ -51,10 +51,10 @@ class _SignupPageState extends State<SignupPage> {
       } on FirebaseAuthException catch (e) {
         setState(() {
           _errorMessage = switch (e.code) {
-            'weak-password' => 'パスワードが弱すぎます',
-            'email-already-in-use' => 'このメールアドレスは既に使用されています',
-            'invalid-email' => 'メールアドレスの形式が正しくありません',
-            _ => '登録エラーが発生しました',
+            'weak-password' => 'Password is too weak',
+            'email-already-in-use' => 'This email is already in use',
+            'invalid-email' => 'Invalid email format',
+            _ => 'Registration error occurred',
           };
         });
       } finally {
@@ -79,7 +79,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('新規登録'),
+        title: const Text('Sign up'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -91,12 +91,12 @@ class _SignupPageState extends State<SignupPage> {
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
-                  labelText: '名前',
+                  labelText: 'Name',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return '名前を入力してください';
+                    return 'Please enter your name';
                   }
                   return null;
                 },
@@ -105,12 +105,12 @@ class _SignupPageState extends State<SignupPage> {
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
-                  labelText: 'メールアドレス',
+                  labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'メールアドレスを入力してください';
+                    return 'Please enter your email';
                   }
                   return null;
                 },
@@ -119,16 +119,16 @@ class _SignupPageState extends State<SignupPage> {
               TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  labelText: 'パスワード',
+                  labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'パスワードを入力してください';
+                    return 'Please enter your password';
                   }
                   if (value.length < 6) {
-                    return 'パスワードは6文字以上である必要があります';
+                    return 'Password must be at least 6 characters';
                   }
                   return null;
                 },
@@ -145,12 +145,12 @@ class _SignupPageState extends State<SignupPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _signup,
-                  child: _isLoading ? const CircularProgressIndicator() : const Text('登録'),
+                  child: _isLoading ? const CircularProgressIndicator() : const Text('Sign up'),
                 ),
               ),
               TextButton(
                 onPressed: () => context.go('/login'),
-                child: const Text('既にアカウントをお持ちの方はこちら'),
+                child: const Text('Already have an account? Sign in'),
               ),
             ],
           ),
