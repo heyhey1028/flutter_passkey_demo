@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_passkey_demo/providers/passkey_service_provider.dart';
 
 class TopPage extends StatelessWidget {
   const TopPage({super.key});
@@ -16,6 +17,28 @@ class TopPage extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to logout: ${e.toString()}')),
+        );
+      }
+    }
+  }
+
+  Future<void> _handleRegisterPasskey(BuildContext context, String userId, String email, String? displayName) async {
+    try {
+      await PasskeyServiceProvider.instance.registerPasskey(
+        userId: userId,
+        username: email,
+        displayName: displayName ?? email,
+      );
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passkey registered successfully')),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to register passkey: ${e.toString()}')),
         );
       }
     }
@@ -118,9 +141,12 @@ class TopPage extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          // TODO: パスキー登録の実装
-                        },
+                        onPressed: () => _handleRegisterPasskey(
+                          context,
+                          user.uid,
+                          user.email!,
+                          user.displayName,
+                        ),
                         icon: const Icon(Icons.key),
                         label: const Text('Register Passkey'),
                         style: ElevatedButton.styleFrom(

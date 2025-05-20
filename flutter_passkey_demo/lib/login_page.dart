@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_passkey_demo/providers/passkey_service_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,10 +15,16 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String _errorMessage = '';
+  bool _isLoading = false;
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       try {
+        setState(() {
+          _isLoading = true;
+          _errorMessage = '';
+        });
+
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
@@ -33,6 +40,38 @@ class _LoginPageState extends State<LoginPage> {
             'invalid-email' => 'Invalid email format',
             _ => 'Authentication error occurred',
           };
+        });
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }
+  }
+
+  Future<void> _loginWithPasskey() async {
+    try {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = '';
+      });
+
+      final firebaseToken = await PasskeyServiceProvider.instance.authenticatePasskey();
+      await FirebaseAuth.instance.signInWithCustomToken(firebaseToken);
+
+      if (mounted) {
+        context.go('/');
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to authenticate with passkey: ${e.toString()}';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
         });
       }
     }
@@ -90,19 +129,29 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: _login,
-                  child: const Text('Sign in with Password'),
+                  onPressed: _isLoading ? null : _login,
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Sign in with Password'),
                 ),
               ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO: パスキーログインの実装
-                  },
+                  onPressed: _isLoading ? null : _loginWithPasskey,
                   icon: const Icon(Icons.fingerprint),
-                  label: const Text('Sign in with Passkey'),
+                  label: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Sign in with Passkey'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
@@ -110,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               TextButton(
-                onPressed: () => context.go('/signup'),
+                onPressed: _isLoading ? null : () => context.go('/signup'),
                 child: const Text('Don\'t have an account? Sign up'),
               ),
             ],
