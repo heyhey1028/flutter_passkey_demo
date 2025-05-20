@@ -115,6 +115,21 @@ class TopPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          // TODO: パスキー登録の実装
+                        },
+                        icon: const Icon(Icons.key),
+                        label: const Text('Register Passkey'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     TextButton(
                       onPressed: () => _handleLogout(context),
                       child: const Text(
