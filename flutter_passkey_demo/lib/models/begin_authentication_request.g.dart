@@ -8,12 +8,8 @@ part of 'begin_authentication_request.dart';
 
 _$BeginAuthenticationRequestImpl _$$BeginAuthenticationRequestImplFromJson(
         Map<String, dynamic> json) =>
-    _$BeginAuthenticationRequestImpl(
-      userId: json['userId'] as String,
-    );
+    _$BeginAuthenticationRequestImpl();
 
 Map<String, dynamic> _$$BeginAuthenticationRequestImplToJson(
         _$BeginAuthenticationRequestImpl instance) =>
-    <String, dynamic>{
-      'userId': instance.userId,
-    };
+    <String, dynamic>{};

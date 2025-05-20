@@ -5,7 +5,6 @@ import * as functions from 'firebase-functions';
 import {
   BeginPasskeyAuthenticationRequest,
   BeginPasskeyAuthenticationResponse,
-  StoredCredential,
 } from '../types';
 
 const db = admin.firestore();
@@ -13,33 +12,24 @@ const RP_ID = functions.config().rp_id;
 
 export const beginPasskeyAuthentication = onCall({
   region: 'asia-northeast2',
-}, async (request) => {
-  const { userId } = request.data as BeginPasskeyAuthenticationRequest;
-
-  // クレデンシャルを取得
-  const credentialDoc = await db.collection('credentials').doc(userId).get();
-  if (!credentialDoc.exists) {
-    throw new HttpsError('failed-precondition', 'Credential not found');
-  }
-
-  const credential = credentialDoc.data() as StoredCredential;
-
+}, async () => {
   const options = await generateAuthenticationOptions({
     rpID: RP_ID,
-    allowCredentials: [
-      {
-        id: Buffer.from(credential.credentialID, 'base64url').toString('base64url'),
-        transports: ['internal'],
-      },
-    ],
+    allowCredentials: [], // Empty list for Discoverable Credentials
     userVerification: 'preferred',
   });
 
-  // チャレンジを保存
-  await db.collection('challenges').doc(userId).set({
+  // Generate a random ID for the challenge
+  const challengeId = admin.firestore().collection('challenges').doc().id;
+
+  // Save the challenge
+  await db.collection('challenges').doc(challengeId).set({
     challenge: options.challenge,
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
   });
 
-  return options as BeginPasskeyAuthenticationResponse;
+  return {
+    ...options,
+    challengeId, // Include challengeId in the response
+  } as BeginPasskeyAuthenticationResponse;
 }); 

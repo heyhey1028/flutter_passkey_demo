@@ -9,7 +9,7 @@ part of 'finish_authentication_request.dart';
 _$FinishAuthenticationRequestImpl _$$FinishAuthenticationRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$FinishAuthenticationRequestImpl(
-      userId: json['userId'] as String,
+      userId: json['userId'] as String?,
       attestationResponse: AttestationResponse.fromJson(
           json['attestationResponse'] as Map<String, dynamic>),
       platform: json['platform'] as String,

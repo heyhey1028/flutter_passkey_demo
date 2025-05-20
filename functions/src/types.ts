@@ -31,9 +31,10 @@ export interface BeginPasskeyAuthenticationRequest {
 export type BeginPasskeyAuthenticationResponse = PublicKeyCredentialRequestOptionsJSON;
 
 export interface FinishPasskeyAuthenticationRequest {
-  userId: string;
+  userId?: string;
   attestationResponse: AuthenticationResponseJSON;
   platform: 'ios' | 'android' | 'web';
+  challengeId: string;
 }
 
 export interface FinishPasskeyAuthenticationResponse {

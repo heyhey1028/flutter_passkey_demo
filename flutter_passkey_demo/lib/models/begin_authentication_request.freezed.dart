@@ -21,16 +21,8 @@ BeginAuthenticationRequest _$BeginAuthenticationRequestFromJson(
 
 /// @nodoc
 mixin _$BeginAuthenticationRequest {
-  String get userId => throw _privateConstructorUsedError;
-
   /// Serializes this BeginAuthenticationRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of BeginAuthenticationRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $BeginAuthenticationRequestCopyWith<BeginAuthenticationRequest>
-      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -39,8 +31,6 @@ abstract class $BeginAuthenticationRequestCopyWith<$Res> {
           $Res Function(BeginAuthenticationRequest) then) =
       _$BeginAuthenticationRequestCopyWithImpl<$Res,
           BeginAuthenticationRequest>;
-  @useResult
-  $Res call({String userId});
 }
 
 /// @nodoc
@@ -56,30 +46,14 @@ class _$BeginAuthenticationRequestCopyWithImpl<$Res,
 
   /// Create a copy of BeginAuthenticationRequest
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? userId = null,
-  }) {
-    return _then(_value.copyWith(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$BeginAuthenticationRequestImplCopyWith<$Res>
-    implements $BeginAuthenticationRequestCopyWith<$Res> {
+abstract class _$$BeginAuthenticationRequestImplCopyWith<$Res> {
   factory _$$BeginAuthenticationRequestImplCopyWith(
           _$BeginAuthenticationRequestImpl value,
           $Res Function(_$BeginAuthenticationRequestImpl) then) =
       __$$BeginAuthenticationRequestImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String userId});
 }
 
 /// @nodoc
@@ -94,57 +68,32 @@ class __$$BeginAuthenticationRequestImplCopyWithImpl<$Res>
 
   /// Create a copy of BeginAuthenticationRequest
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? userId = null,
-  }) {
-    return _then(_$BeginAuthenticationRequestImpl(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$BeginAuthenticationRequestImpl implements _BeginAuthenticationRequest {
-  const _$BeginAuthenticationRequestImpl({required this.userId});
+  const _$BeginAuthenticationRequestImpl();
 
   factory _$BeginAuthenticationRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$BeginAuthenticationRequestImplFromJson(json);
 
   @override
-  final String userId;
-
-  @override
   String toString() {
-    return 'BeginAuthenticationRequest(userId: $userId)';
+    return 'BeginAuthenticationRequest()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BeginAuthenticationRequestImpl &&
-            (identical(other.userId, userId) || other.userId == userId));
+            other is _$BeginAuthenticationRequestImpl);
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, userId);
-
-  /// Create a copy of BeginAuthenticationRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$BeginAuthenticationRequestImplCopyWith<_$BeginAuthenticationRequestImpl>
-      get copyWith => __$$BeginAuthenticationRequestImplCopyWithImpl<
-          _$BeginAuthenticationRequestImpl>(this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   Map<String, dynamic> toJson() {
@@ -156,19 +105,9 @@ class _$BeginAuthenticationRequestImpl implements _BeginAuthenticationRequest {
 
 abstract class _BeginAuthenticationRequest
     implements BeginAuthenticationRequest {
-  const factory _BeginAuthenticationRequest({required final String userId}) =
+  const factory _BeginAuthenticationRequest() =
       _$BeginAuthenticationRequestImpl;
 
   factory _BeginAuthenticationRequest.fromJson(Map<String, dynamic> json) =
       _$BeginAuthenticationRequestImpl.fromJson;
-
-  @override
-  String get userId;
-
-  /// Create a copy of BeginAuthenticationRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BeginAuthenticationRequestImplCopyWith<_$BeginAuthenticationRequestImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }

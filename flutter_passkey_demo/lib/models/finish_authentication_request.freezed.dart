@@ -21,7 +21,7 @@ FinishAuthenticationRequest _$FinishAuthenticationRequestFromJson(
 
 /// @nodoc
 mixin _$FinishAuthenticationRequest {
-  String get userId => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
   AttestationResponse get attestationResponse =>
       throw _privateConstructorUsedError;
   String get platform => throw _privateConstructorUsedError;
@@ -45,7 +45,7 @@ abstract class $FinishAuthenticationRequestCopyWith<$Res> {
           FinishAuthenticationRequest>;
   @useResult
   $Res call(
-      {String userId,
+      {String? userId,
       AttestationResponse attestationResponse,
       String platform});
 
@@ -68,15 +68,15 @@ class _$FinishAuthenticationRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = null,
+    Object? userId = freezed,
     Object? attestationResponse = null,
     Object? platform = null,
   }) {
     return _then(_value.copyWith(
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       attestationResponse: null == attestationResponse
           ? _value.attestationResponse
           : attestationResponse // ignore: cast_nullable_to_non_nullable
@@ -110,7 +110,7 @@ abstract class _$$FinishAuthenticationRequestImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String userId,
+      {String? userId,
       AttestationResponse attestationResponse,
       String platform});
 
@@ -133,15 +133,15 @@ class __$$FinishAuthenticationRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = null,
+    Object? userId = freezed,
     Object? attestationResponse = null,
     Object? platform = null,
   }) {
     return _then(_$FinishAuthenticationRequestImpl(
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       attestationResponse: null == attestationResponse
           ? _value.attestationResponse
           : attestationResponse // ignore: cast_nullable_to_non_nullable
@@ -159,16 +159,14 @@ class __$$FinishAuthenticationRequestImplCopyWithImpl<$Res>
 class _$FinishAuthenticationRequestImpl
     implements _FinishAuthenticationRequest {
   const _$FinishAuthenticationRequestImpl(
-      {required this.userId,
-      required this.attestationResponse,
-      required this.platform});
+      {this.userId, required this.attestationResponse, required this.platform});
 
   factory _$FinishAuthenticationRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$FinishAuthenticationRequestImplFromJson(json);
 
   @override
-  final String userId;
+  final String? userId;
   @override
   final AttestationResponse attestationResponse;
   @override
@@ -216,7 +214,7 @@ class _$FinishAuthenticationRequestImpl
 abstract class _FinishAuthenticationRequest
     implements FinishAuthenticationRequest {
   const factory _FinishAuthenticationRequest(
-      {required final String userId,
+      {final String? userId,
       required final AttestationResponse attestationResponse,
       required final String platform}) = _$FinishAuthenticationRequestImpl;
 
@@ -224,7 +222,7 @@ abstract class _FinishAuthenticationRequest
       _$FinishAuthenticationRequestImpl.fromJson;
 
   @override
-  String get userId;
+  String? get userId;
   @override
   AttestationResponse get attestationResponse;
   @override

@@ -17,22 +17,29 @@ const ORIGIN_WEB = functions.config().origin_web;
 export const finishPasskeyAuthentication = onCall({
   region: 'asia-northeast2',
 }, async (request) => {
-  const { userId, attestationResponse, platform } = request.data as FinishPasskeyAuthenticationRequest;
+  const { attestationResponse, platform, challengeId } = request.data as FinishPasskeyAuthenticationRequest;
 
   // チャレンジを取得
-  const challengeDoc = await db.collection('challenges').doc(userId).get();
+  const challengeDoc = await db.collection('challenges').doc(challengeId).get();
   if (!challengeDoc.exists) {
     throw new HttpsError('failed-precondition', 'Challenge not found');
   }
 
   const expectedChallenge = challengeDoc.data()?.challenge;
 
-  // クレデンシャルを取得
-  const credentialDoc = await db.collection('credentials').doc(userId).get();
-  if (!credentialDoc.exists) {
+  // クレデンシャルIDからユーザーを特定
+  const credentialId = attestationResponse.id;
+  const credentialsSnapshot = await db.collection('credentials')
+    .where('credentialID', '==', credentialId)
+    .limit(1)
+    .get();
+
+  if (credentialsSnapshot.empty) {
     throw new HttpsError('failed-precondition', 'Credential not found');
   }
 
+  const credentialDoc = credentialsSnapshot.docs[0];
+  const userId = credentialDoc.id;
   const credential = credentialDoc.data() as StoredCredential;
 
   try {
@@ -63,7 +70,7 @@ export const finishPasskeyAuthentication = onCall({
       });
 
       // チャレンジを削除
-      await db.collection('challenges').doc(userId).delete();
+      await db.collection('challenges').doc(challengeId).delete();
 
       // Firebaseカスタムトークンの生成
       const customToken = await admin.auth().createCustomToken(userId);

@@ -7,7 +7,7 @@ part 'finish_authentication_request.g.dart';
 @freezed
 class FinishAuthenticationRequest with _$FinishAuthenticationRequest {
   const factory FinishAuthenticationRequest({
-    required String userId,
+    String? userId,
     required AttestationResponse attestationResponse,
     required String platform,
   }) = _FinishAuthenticationRequest;

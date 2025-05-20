@@ -85,7 +85,7 @@ class PasskeyService {
     try {
       // Step 1: Begin authentication by getting options from the server
       final beginResponse = await _repository.beginPasskeyAuthentication(
-        const BeginAuthenticationRequest(),
+        BeginAuthenticationRequest(),
       );
 
       // Step 2: Create authentication request with WebAuthn options
