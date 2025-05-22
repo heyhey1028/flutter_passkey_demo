@@ -15,13 +15,14 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String _errorMessage = '';
-  bool _isLoading = false;
+  bool _isPasswordLoading = false;
+  bool _isPasskeyLoading = false;
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       try {
         setState(() {
-          _isLoading = true;
+          _isPasswordLoading = true;
           _errorMessage = '';
         });
 
@@ -44,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
       } finally {
         if (mounted) {
           setState(() {
-            _isLoading = false;
+            _isPasswordLoading = false;
           });
         }
       }
@@ -54,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _loginWithPasskey() async {
     try {
       setState(() {
-        _isLoading = true;
+        _isPasskeyLoading = true;
         _errorMessage = '';
       });
 
@@ -71,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
     } finally {
       if (mounted) {
         setState(() {
-          _isLoading = false;
+          _isPasskeyLoading = false;
         });
       }
     }
@@ -129,8 +130,8 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: _isLoading ? null : _login,
-                  child: _isLoading
+                  onPressed: _isPasswordLoading ? null : _login,
+                  child: _isPasswordLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
@@ -143,9 +144,9 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: _isLoading ? null : _loginWithPasskey,
+                  onPressed: _isPasskeyLoading ? null : _loginWithPasskey,
                   icon: const Icon(Icons.fingerprint),
-                  label: _isLoading
+                  label: _isPasskeyLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
@@ -159,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               TextButton(
-                onPressed: _isLoading ? null : () => context.go('/signup'),
+                onPressed: (_isPasswordLoading || _isPasskeyLoading) ? null : () => context.go('/signup'),
                 child: const Text('Don\'t have an account? Sign up'),
               ),
             ],
